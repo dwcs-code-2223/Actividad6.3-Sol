@@ -19,9 +19,8 @@ class UsuarioServicio {
 
         $usuarios = $this->userRepository->findAll();
         foreach ($usuarios as $usuario) {
-             $roles= $this->rolRepository->findRolesByUserId($usuario->getId());
-             $usuario->setRoles($roles);
-            
+            $roles = $this->rolRepository->findRolesByUserId($usuario->getId());
+            $usuario->setRoles($roles);
         }
 
         return $usuarios;
@@ -31,10 +30,10 @@ class UsuarioServicio {
     public function login(string $user, string $pwd, $rolId): ?Usuario {
 
         $userResult = $this->userRepository->getUsuarioByEmail($user);
-        
-       $roles= $this->rolRepository->findRolesByUserId($userResult->getId());
-      
-       $userResult->setRoles($roles);
+
+        $roles = $this->rolRepository->findRolesByUserId($userResult->getId());
+
+        $userResult->setRoles($roles);
 
         if ($userResult != null && password_verify($pwd, $userResult->getPwdhash())) {
 
@@ -91,15 +90,61 @@ class UsuarioServicio {
 
     public function register($email, $pwd1, $pwd2) {
         $usuario = null;
+        $error = "";
+        $exito = false;
 
-       
-            $error = "";
+        if ($pwd1 !== $pwd2) {
+            $error = "Las contraseñas no coinciden";
+        } else {
+            $usuario = $this->userRepository->getUsuarioByEmail($email);
+            if ($usuario != null) {
+                $error = "El email ya está en uso";
+            } else {
 
-            if ($pwd1 !== $pwd2) {
-                $error = "Las contraseñas no coinciden";
+                try {
+                    $pwd_hash = password_hash($pwd1, PASSWORD_BCRYPT);
+
+                    $usuario = new Usuario();
+                    $usuario->setEmail($email);
+                    $usuario->setPwdhash($pwd_hash);
+
+                    $this->userRepository->beginTransaction();
+
+                    $usuario = $this->userRepository->create($usuario);
+                    $exito = ($usuario != null);
+
+                    $rol = $this->rolRepository->findRolByName(USER_ROLE);
+
+                    $exito = $exito && ($rol != null );
+
+                    if ($rol != null) {
+                        $exito = $exito && $this->userRepository->addRoleToUser($usuario->getId(), $rol->getId());
+                    }
+                    if ($exito) {
+                        $this->userRepository->commit();
+                    } else {
+                        $this->userRepository->rollback();
+                        $error="No ha sido posible registrar al usuario";
+                    }
+                } catch (Exception $ex) {
+                    echo "Ha habido una exception: " . $ex->getMessage();
+                    $this->userRepository->rollback();
+                    $error="Ha habido algún problema. No ha sido posible registrar al usuario";
+                }
             }
+        }
+        
+        if(($error!=="") || ($usuario==null)){
+            $usuario = new Usuario();
+            $usuario->setStatus(Util::OPERATION_NOK);
+            $usuario->addError($error);
+        }
+        else{
+            $usuario->setStatus(Util::OPERATION_OK);
+        }
+        
 
-           //TO DO
+        
         return $usuario;
     }
 

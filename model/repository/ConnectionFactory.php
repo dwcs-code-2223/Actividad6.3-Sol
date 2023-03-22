@@ -39,8 +39,11 @@ class ConnectionFactory {
                     ((!empty($settings['database']['port'])) ? (';port=' . $settings['database']['port']) : '') .
                     ';dbname=' . $settings['database']['schema'];
 
-            self::$connection = new PDO(
-                    //TO DO
+            self::$connection = new PDO($dns,
+                    $settings['database']['username'] ,
+                    $settings['database']['password'],
+                    array(PDO::ATTR_PERSISTENT => $settings['database']['persistent'])                    
+                 
                     
             );
         }
