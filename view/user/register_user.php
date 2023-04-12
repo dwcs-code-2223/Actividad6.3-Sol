@@ -33,31 +33,34 @@
 
                                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Regístrese</p>
 
-                                <form class="mx-1 mx-md-4" method="post" action="FrontController.php?controller=Usuario&action=register">
+                                <form class="mx-1 mx-md-4" method="post" action="FrontController.php?controller=Usuario&action=register" id="registerForm" >
 
 
 
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
-                                            <input type="email" id="form3Example3c" class="form-control" name="email" required/>
-                                            <label class="form-label" for="form3Example3c">Email</label>
+                                            <input type="email"  class="form-control" name="email" required id="email"/>
+                                            
+                                            <label class="form-label" for="email">Email</label>
+                                             <span class="error" aria-live="polite"></span>
                                         </div>
                                     </div>
 
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
-                                            <input type="password" id="form3Example4c" class="form-control" name="pwd1" required/>
-                                            <label class="form-label" for="form3Example4c">Contraseña</label>
+                                            <input type="password"  class="form-control" name="pwd1" required id="pwd1" minlength="6"/>
+                                            <label class="form-label" for="pwd1">Contraseña</label>
                                         </div>
                                     </div>
 
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
-                                            <input type="password" id="form3Example4cd" class="form-control"  name="pwd2" required/>
-                                            <label class="form-label" for="form3Example4cd">Repita su contraseña</label>
+                                            <input type="password"  class="form-control"  name="pwd2" required id="pwd2" minlength="6"/>                                          
+                                            <label class="form-label" for="pwd2">Repita su contraseña</label>
+                                            <span class="error" aria-live="polite"></span>
                                         </div>
                                     </div>
 
@@ -76,7 +79,7 @@
 
 
                                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                        <input type="submit" class="btn btn-primary btn-lg" value="Registrar usuario"/>
+                                        <input type="submit" class="btn btn-primary btn-lg" value="Registrar usuario" id="bt_register"/>
                                     </div>
 
                                 </form>
@@ -97,3 +100,4 @@
 
 
 </section>
+<script src="../js/register_validation.js" type="text/javascript"></script>
