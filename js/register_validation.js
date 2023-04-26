@@ -19,7 +19,7 @@ La segunda parte crea la expresión de función cuya ejecución es inmediata (),
     var pwd1 = null;
     var pwd2 = null;
 
-    let pwdRegExp = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\$@\.\?])(?=.{6,})$');
+    let pwdRegExp = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\$@\.\?])(?=.{6,})');
 
     window.onload = function () {
         onceLoaded();
